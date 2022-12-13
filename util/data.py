@@ -56,7 +56,7 @@ def get_dataloaders(args: argparse.Namespace):
     return trainloader, projectloader, testloader, classes, c
 
 
-def get_birds(augment: bool, train_dir:str, project_dir: str, test_dir:str, img_size = 224): 
+def get_birds(augment: bool, train_dir:str, project_dir: str, test_dir:str, img_size = 32): 
     shape = (3, img_size, img_size)
     mean = (0.485, 0.456, 0.406)
     std = (0.229, 0.224, 0.225)
