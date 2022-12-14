@@ -135,12 +135,13 @@ from torch.utils.data import DataLoader, RandomSampler, SequentialSampler
     
 #     return trainset, projectset, testset, classes, shape
 
-def get_train_test_filenames(dataset_pth:str):
+def get_train_test_filenames(args: argparse.Namespace):
+    # def get_train_test_filenames(dataset_pth:str):
     """
     dataset_pth: parent dir of images.txt etc.
     """
-    path_images = os.path.join(dataset_pth,'images.txt')
-    path_split = os.path.join(dataset_pth,'train_test_split.txt')
+    path_images = os.path.join(args.dataset_pth,'images.txt')
+    path_split = os.path.join(args.dataset_pth,'train_test_split.txt')
 
     idx_to_img = {}
     with open(path_images, 'r') as f:
@@ -170,12 +171,13 @@ def get_train_test_filenames(dataset_pth:str):
     return train_filenames, test_filenames
 
 
-def get_file_classes(dataset_pth:str, filenames):
+def get_file_classes(args: argparse.Namespace):
+    # def get_file_classes(dataset_pth:str, filenames):
     """
     filenames: list contains all train/test filenames.
     return dict type.
     """
-    path_classes = os.path.join(dataset_pth,'classes.txt')
+    path_classes = os.path.join(args.dataset_pth,'classes.txt')
     classes_to_idx = {}
     with open(path_classes, 'r') as f:
         classes = f.read().split('\n')[:-1]
@@ -190,7 +192,7 @@ def get_file_classes(dataset_pth:str, filenames):
         classes_dict[item] = int(item_class)
     return classes_dict
 
-def get_text_data(filename_list, prefix_dir):
+def get_text_data(filename_list, prefix_dir='./text'):
     content_list = []
     for f in filename_list:
         file_pth = prefix_dir + '/' + f + '.txt'
@@ -203,16 +205,17 @@ def get_text_data(filename_list, prefix_dir):
     return content_list
 
 
-def preprocess_dataset(dataset_pth:str, prefix_dir:str):
+def preprocess_dataset(args: argparse.Namespace):
+    # def preprocess_dataset(dataset_pth:str, prefix_dir:str):
     """
     dataset_pth: parent dir of images.txt etc.;
     prefix_dir: parent directory of the txt files.
     """
-    train_filenames, test_filenames = get_train_test_filenames(dataset_pth)
-    train_labels = list(get_file_classes(dataset_pth, train_filenames).values())
-    test_labels = list(get_file_classes(dataset_pth, test_filenames).values())
-    train_texts = get_text_data(train_filenames, prefix_dir)
-    test_texts = get_text_data(test_filenames, prefix_dir)
+    train_filenames, test_filenames = get_train_test_filenames(args.dataset_pth)
+    train_labels = list(get_file_classes(args.dataset_pth, train_filenames).values())
+    test_labels = list(get_file_classes(args.dataset_pth, test_filenames).values())
+    train_texts = get_text_data(train_filenames, args.prefix_dir)
+    test_texts = get_text_data(test_filenames, args.prefix_dir)
 
     return train_texts, test_texts, train_labels, test_labels
 
@@ -258,32 +261,35 @@ def tokenization(texts, max_length, pretrain_model='bert-base-cased'):
 
 
 def encoded_dataset(texts, labels, max_length, pretrain_model='bert-base-cased'):
+    # def encoded_dataset(texts, labels, max_length, pretrain_model='bert-base-cased'):
     input_ids, attention_masks = tokenization(texts, max_length, pretrain_model)
     target_labels = torch.tensor(labels)
     dataset = TensorDataset(input_ids, attention_masks, target_labels)
     return dataset
 
 
-def get_dataloaders(dataset_pth:str, prefix_dir:str, batch_size, max_length, pretrain_model='bert-base-cased'):
+def get_dataloaders(args: argparse.Namespace):
+    # def get_dataloaders(dataset_pth:str, prefix_dir:str, batch_size, max_length, pretrain_model='bert-base-cased')
+    
     # get trainset/testset text and label
-    train_texts, test_texts, train_labels, test_labels = preprocess_dataset(dataset_pth, prefix_dir)
+    train_texts, test_texts, train_labels, test_labels = preprocess_dataset(args)
 
     # tokenization and get dataset
-    train_dataset = encoded_dataset(train_texts, train_labels, max_length, pretrain_model)
-    test_dataset = encoded_dataset(test_texts, test_labels, max_length, pretrain_model)
+    train_dataset = encoded_dataset(train_texts, train_labels, args.max_length, args.pretrain_model)
+    test_dataset = encoded_dataset(test_texts, test_labels, args.max_length, args.pretrain_model)
 
     # get Dataloaders
     train_dataloader = DataLoader(
             train_dataset,  # The training samples.
             sampler = RandomSampler(train_dataset), # Select batches randomly
-            batch_size = batch_size # Trains with this batch size.
+            batch_size = args.batch_size # Trains with this batch size.
         )
     
     # For test the order doesn't matter, so we'll just read them sequentially.
     test_dataloader = DataLoader(
                 test_dataset, # The test samples.
                 sampler = SequentialSampler(test_dataset), # Pull out batches sequentially.
-                batch_size = batch_size # Evaluate with this batch size.
+                batch_size = args.batch_size # Evaluate with this batch size.
             )
     
     classes = list(set(train_labels))
