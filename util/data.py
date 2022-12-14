@@ -1,13 +1,13 @@
 
-# import numpy as np
-# import argparse
-# import os
-# import torch
-# import torch.optim
-# import torch.utils.data
-# import torchvision
-# import torchvision.transforms as transforms
-# from torchvision.transforms import ToTensor, Normalize, Compose, Lambda
+import numpy as np
+import argparse
+import os
+import torch
+import torch.optim
+import torch.utils.data
+import torchvision
+import torchvision.transforms as transforms
+from torchvision.transforms import ToTensor, Normalize, Compose, Lambda
 
 import os
 import numpy as np
