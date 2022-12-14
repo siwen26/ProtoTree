@@ -213,8 +213,8 @@ def preprocess_dataset(args: argparse.Namespace):
     train_filenames, test_filenames = get_train_test_filenames(args)
     train_labels = list(get_file_classes(args.dataset_pth, train_filenames).values())
     test_labels = list(get_file_classes(args.dataset_pth, test_filenames).values())
-    train_texts = get_text_data(train_filenames, args.prefix_dir)
-    test_texts = get_text_data(test_filenames, args.prefix_dir)
+    train_texts = get_text_data(train_filenames, args.text_pth)
+    test_texts = get_text_data(test_filenames, args.text_pth)
 
     return train_texts, test_texts, train_labels, test_labels
 
