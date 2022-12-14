@@ -21,7 +21,7 @@ def get_args() -> argparse.Namespace:
                         type=str,
                         default='./data/CUB_200_2011',
                         help='The directory of CUB image dataset.')
-    parser.add_argument('--dataset_pth',
+    parser.add_argument('--text_pth',
                         type=str,
                         default='./text',
                         help='The directory that stores the CUB text files.')
