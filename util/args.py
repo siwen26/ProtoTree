@@ -17,6 +17,18 @@ def get_args() -> argparse.Namespace:
                         type=str,
                         default='CUB-200-2011',
                         help='Data set on which the ProtoTree should be trained')
+    parser.add_argument('--dataset_pth',
+                        type=str,
+                        default='./data/CUB_200_2011',
+                        help='The directory of CUB image dataset.')
+    parser.add_argument('--dataset_pth',
+                        type=str,
+                        default='./text',
+                        help='The directory that stores the CUB text files.')
+    parser.add_argument('--pretrain_model',
+                        type=str,
+                        default='bert-base-cased',
+                        help='The pretrained BERT model for tokenization and embedding.')
     parser.add_argument('--net',
                         type=str,
                         default='resnet50_inat',
@@ -25,6 +37,10 @@ def get_args() -> argparse.Namespace:
                         type=int,
                         default=64,
                         help='Batch size when training the model using minibatch gradient descent')
+    parser.add_argument('--max_length',
+                        type=int,
+                        default=128,
+                        help='The maximum length kept for each input texts.')
     parser.add_argument('--depth',
                         type=int,
                         default=9,
