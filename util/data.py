@@ -171,13 +171,12 @@ def get_train_test_filenames(args: argparse.Namespace):
     return train_filenames, test_filenames
 
 
-def get_file_classes(args: argparse.Namespace):
-    # def get_file_classes(dataset_pth:str, filenames):
+def get_file_classes(dataset_pth:str, filenames):
     """
     filenames: list contains all train/test filenames.
     return dict type.
     """
-    path_classes = os.path.join(args.dataset_pth,'classes.txt')
+    path_classes = os.path.join(dataset_pth,'classes.txt')
     classes_to_idx = {}
     with open(path_classes, 'r') as f:
         classes = f.read().split('\n')[:-1]
@@ -192,7 +191,7 @@ def get_file_classes(args: argparse.Namespace):
         classes_dict[item] = int(item_class)
     return classes_dict
 
-def get_text_data(filename_list, prefix_dir='./text'):
+def get_text_data(filename_list, prefix_dir):
     content_list = []
     for f in filename_list:
         file_pth = prefix_dir + '/' + f + '.txt'
@@ -211,7 +210,7 @@ def preprocess_dataset(args: argparse.Namespace):
     dataset_pth: parent dir of images.txt etc.;
     prefix_dir: parent directory of the txt files.
     """
-    train_filenames, test_filenames = get_train_test_filenames(args.dataset_pth)
+    train_filenames, test_filenames = get_train_test_filenames(args)
     train_labels = list(get_file_classes(args.dataset_pth, train_filenames).values())
     test_labels = list(get_file_classes(args.dataset_pth, test_filenames).values())
     train_texts = get_text_data(train_filenames, args.prefix_dir)
