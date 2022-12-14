@@ -42,7 +42,7 @@ def run_tree(args=None):
     log.create_log(log_loss, 'epoch', 'batch', 'loss', 'batch_train_acc')
 
     # Obtain the dataset and dataloaders
-    trainloader, projectloader, testloader, classes, num_channels = get_dataloaders(args)
+    trainloader, testloader, classes = get_dataloaders(args)
     # Create a convolutional network based on arguments and add 1x1 conv layer
     features_net, add_on_layers = get_network(num_channels, args)
     # Create a ProtoTree
