@@ -181,7 +181,7 @@ def get_file_classes(dataset_pth:str, filenames):
     with open(path_classes, 'r') as f:
         classes = f.read().split('\n')[:-1]
         for each in classes:
-            id = each.split(' ')[0]
+            id = str(int(each.split(' ')[0])-1)
             label = each.split(' ')[1]
             classes_to_idx[label] = id
 
