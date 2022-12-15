@@ -136,29 +136,31 @@ def run_tree(args=None):
     '''
         PROJECT
     '''
-    project_info, tree = project_with_class_constraints(deepcopy(pruned_tree), projectloader, device, args, log)
-    name = "pruned_and_projected"
-    save_tree_description(tree, optimizer, scheduler, name, log)
-    pruned_projected_tree = deepcopy(tree)
-    # Analyse and evaluate pruned tree with projected prototypes
-    average_distance_nearest_image(project_info, tree, log)
-    leaf_labels = analyse_leafs(tree, epoch+3, len(classes), leaf_labels, args.pruning_threshold_leaves, log)
-    analyse_leaf_distributions(tree, log)
-    eval_info = eval(tree, testloader, name, device, log)
-    pruned_projected_test_acc = eval_info['test_accuracy']
-    eval_info_samplemax = eval(tree, testloader, name, device, log, 'sample_max')
-    get_avg_path_length(tree, eval_info_samplemax, log)
-    eval_info_greedy = eval(tree, testloader, name, device, log, 'greedy')
-    get_avg_path_length(tree, eval_info_greedy, log)
-    fidelity_info = eval_fidelity(tree, testloader, device, log)
+    ### DON'T ADD PROJECT for text.
+    
+#     project_info, tree = project_with_class_constraints(deepcopy(pruned_tree), projectloader, device, args, log)
+#     name = "pruned_and_projected"
+#     save_tree_description(tree, optimizer, scheduler, name, log)
+#     pruned_projected_tree = deepcopy(tree)
+#     # Analyse and evaluate pruned tree with projected prototypes
+#     average_distance_nearest_image(project_info, tree, log)
+#     leaf_labels = analyse_leafs(tree, epoch+3, len(classes), leaf_labels, args.pruning_threshold_leaves, log)
+#     analyse_leaf_distributions(tree, log)
+#     eval_info = eval(tree, testloader, name, device, log)
+#     pruned_projected_test_acc = eval_info['test_accuracy']
+#     eval_info_samplemax = eval(tree, testloader, name, device, log, 'sample_max')
+#     get_avg_path_length(tree, eval_info_samplemax, log)
+#     eval_info_greedy = eval(tree, testloader, name, device, log, 'greedy')
+#     get_avg_path_length(tree, eval_info_greedy, log)
+#     fidelity_info = eval_fidelity(tree, testloader, device, log)
 
-    # Upsample prototype for visualization
-    project_info = upsample(tree, project_info, projectloader, name, args, log)
+#     # Upsample prototype for visualization
+#     project_info = upsample(tree, project_info, projectloader, name, args, log)
     # visualize tree
-    gen_vis(tree, name, args, classes)
+    # gen_vis(tree, name, args, classes)
 
     
-    return trained_tree.to('cpu'), pruned_tree.to('cpu'), pruned_projected_tree.to('cpu'), original_test_acc, pruned_test_acc, pruned_projected_test_acc, project_info, eval_info_samplemax, eval_info_greedy, fidelity_info
+    return trained_tree.to('cpu'), pruned_tree.to('cpu'), original_test_acc, pruned_test_acc
 
 
 if __name__ == '__main__':
