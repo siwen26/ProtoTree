@@ -262,10 +262,10 @@ def get_optimizer(tree, args: argparse.Namespace) -> torch.optim.Optimizer:
                 paramlist.append({"params": dist_params, "lr": args.lr_pi, "weight_decay_rate": 0})
     
     else: #other network architectures
-        for name,param in tree._net.named_parameters():
-            params_to_freeze.append(param)
+#         for name,param in tree._net.named_parameters():
+#             params_to_freeze.append(param)
         paramlist = [
-            {"params": params_to_freeze, "lr": args.lr_net, "weight_decay_rate": args.weight_decay}, 
+            {"params": tree._net.parameters(), "lr": args.lr_net, "weight_decay_rate": args.weight_decay}, 
             {"params": tree._add_on.parameters(), "lr": args.lr_block, "weight_decay_rate": args.weight_decay},
             {"params": tree.prototype_layer.parameters(), "lr": args.lr,"weight_decay_rate": 0}]
         if args.disable_derivative_free_leaf_optim:
