@@ -45,6 +45,14 @@ def get_args() -> argparse.Namespace:
                         type=int,
                         default=16,
                         help='w, h of the reshaped text feature matrix for conv2d layers.')
+    parser.add_argument('--bert_embedding_size',
+                        type=int,
+                        default=768,
+                        help='embedding size of pretrained BERT model.')
+    parser.add_argument('--projected_embedding_size',
+                        type=int,
+                        default=256,
+                        help='the projected size of bert embedding, will be reformed to square matrx size: text_reshaped_size x text_reshaped_size for conv2d layer.')
     parser.add_argument('--depth',
                         type=int,
                         default=9,
