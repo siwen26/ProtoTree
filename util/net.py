@@ -73,7 +73,7 @@ class BERT_EMBEDDING(BertModel):
         sequence_output, pooler_output = self.bert(input_ids, attention_mask, return_dict=False)
         return sequence_output, pooler_output
 
-##TODO: change to args param##      
+  
 class ADD_ON_LAYERS(nn.Module):
     def __init__(self, args: argparse.Namespace): 
       # out_channels = arg.num_features = 64
