@@ -75,20 +75,31 @@ class BERT_EMBEDDING(BertModel):
 
 ##TODO: change to args param##      
 class ADD_ON_LAYERS(nn.Module):
-    def __init__(self, in_feature, out_feature, in_channels, out_channels): 
+    def __init__(self, args: argparse.Namespace): 
       # out_channels = arg.num_features = 64
-      # in_channels = 128
+      # in_channels = max_length = 128
+      # in_feature: dimension of BERT embedding size: 768
+      # out_feature: dimension of projected feature: 256
         super(ADD_ON_LAYERS, self).__init__()
-        self.linear = nn.Linear(in_feature, out_feature)
+        self.linear = nn.Linear(args.bert_embedding_size, args.projected_embedding_size)
         self.add_on_layers = nn.Sequential(
-                    nn.Conv2d(in_channels=in_channels, out_channels=out_channels, kernel_size=1, bias=False),
+                    nn.Conv2d(in_channels=args.max_length, out_channels=arg.num_features, kernel_size=1, bias=False),
                     nn.Sigmoid()
                     )
     
-    def forward(self, features, batch_size=64, num_channel=128, size=16):
+    def forward(self, features, args: argparse.Namespace):
+        # def forward(self, features, batch_size=64, num_channel=128, size=16):
         output = self.linear(features)
-        reshaped_features = torch.reshape(output, (batch_size,num_channel,size,size))
+        reshaped_features = torch.reshape(output, (args.batch_size, args.max_length, args.text_reshaped_size, args.text_reshaped_size))
         result = self.add_on_layers(reshaped_features)
         return result
 
 
+def get_network(args: argparse.Namespace):
+    # Define a conv net for estimating the probabilities at each decision node
+    
+    features = BERT_EMBEDDING(args)
+    add_on_layers = ADD_ON_LAYERS(args)
+    
+    # return two defined models: 1. bert embedding feature extraction pretrainde model; 2. add on conv2d model.
+    return features, add_on_layers
