@@ -65,8 +65,8 @@ def freeze(tree: ProtoTree, epoch: int, params_to_freeze: list, params_to_train:
 
 
 class BERT_EMBEDDING(BertModel):
-    def __init__(self, config, args: argparse.Namespace):
-        super().__init__(config)
+    def __init__(self, args: argparse.Namespace):
+        super(BERT_EMBEDDING, self).__init__()
         self.bert = BertModel.from_pretrained(args.pretrain_model)
     
     def forward(self, input_ids, token_type_ids=None, attention_mask=None, labels=None):
@@ -98,7 +98,7 @@ class ADD_ON_LAYERS(nn.Module):
 def get_network(args: argparse.Namespace):
     # Define a conv net for estimating the probabilities at each decision node
     
-    features = BERT_EMBEDDING.from_pretrained(args.pretrain_model)
+    features = BERT_EMBEDDING(args)
     add_on_layers = ADD_ON_LAYERS(args)
     
     # return two defined models: 1. bert embedding feature extraction pretrainde model; 2. add on conv2d model.
