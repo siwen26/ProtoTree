@@ -102,7 +102,11 @@ def get_network(args: argparse.Namespace):
     # Define a conv net for estimating the probabilities at each decision node
     
     features = BERT_EMBEDDING.from_pretrained("bert-base-cased")
-    add_on_layers = ADD_ON_LAYERS(args)
+    project_layer = nn.Linear(args.bert_embedding_size, args.projected_embedding_size, bias=False)
+    add_on_layers = nn.Sequential(
+                    nn.Conv2d(in_channels=args.max_length, out_channels=args.num_features, kernel_size=1, bias=False),
+                    nn.Sigmoid()
+                    )
     
-    # return two defined models: 1. bert embedding feature extraction pretrainde model; 2. add on conv2d model.
-    return features, add_on_layers
+    # return 3 defined models
+    return features, project_layer, add_on_layers
