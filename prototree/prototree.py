@@ -225,7 +225,7 @@ class ProtoTree(nn.Module):
         # Perform a forward pass with the conv net
         features, _ = self._net(input_ids=xs, attention_mask = attention_masks)
         features = self._project_layer(features)
-        features = torch.reshape(features, (64, 128, 16, 16))
+        features = torch.reshape(features, (-1, 128, 16, 16))
         features = self._add_on(features)
 
         # Use the features to compute the distances from the prototypes
