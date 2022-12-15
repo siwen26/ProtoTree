@@ -62,6 +62,7 @@ def init_tree(tree: ProtoTree, optimizer, scheduler, device, args: argparse.Name
         with torch.no_grad():
             # initialize prototypes
             torch.nn.init.normal_(tree.prototype_layer.prototype_vectors, mean=mean, std=std)
+            tree._project_layer.apply(init_weights_xavier)
             tree._add_on.apply(init_weights_xavier)
     return tree, epoch
 
