@@ -66,7 +66,7 @@ def init_tree(tree: ProtoTree, optimizer, scheduler, device, args: argparse.Name
     return tree, epoch
 
 def init_weights_xavier(m):
-    if type(m) == torch.nn.Conv2d:
+    if type(m) == torch.nn.Conv2d or type(m) == torch.nn.Linear:
         torch.nn.init.xavier_normal_(m.weight, gain=torch.nn.init.calculate_gain('sigmoid'))
 
 def init_weights_kaiming(m):
