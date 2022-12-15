@@ -46,16 +46,16 @@ def train_epoch(tree: ProtoTree,
                     desc=progress_prefix+' %s'%epoch,
                     ncols=0)
     # Iterate through the data set to update leaves, prototypes and network
-    for i, (xs, ys) in train_iter:
+    for i, (xs, ams, ys) in train_iter:
         # Make sure the model is in train mode
         tree.train()
         # Reset the gradients
         optimizer.zero_grad()
 
-        xs, ys = xs.to(device), ys.to(device)
+        xs, ams, ys = xs.to(device), ams.to(device), ys.to(device)
 
         # Perform a forward pass through the network
-        ys_pred, info = tree.forward(xs)
+        ys_pred, info = tree.forward(xs, ams)
 
         # Learn prototypes and network with gradient descent. 
         # If disable_derivative_free_leaf_optim, leaves are optimized with gradient descent as well.
@@ -153,13 +153,13 @@ def train_epoch_kontschieder(tree: ProtoTree,
                         ncols=0)
     # Make sure the model is in train mode
     tree.train()
-    for i, (xs, _, ys) in train_iter:
-        xs, ys = xs.to(device), ys.to(device)
+    for i, (xs, ams, ys) in train_iter:
+        xs, ams, ys = xs.to(device), ams.to(device), ys.to(device)
 
         # Reset the gradients
         optimizer.zero_grad()
         # Perform a forward pass through the network
-        ys_pred, _ = tree.forward(xs)
+        ys_pred, _ = tree.forward(xs, ams)
         # Compute the loss
         if tree._log_probabilities:
             loss = F.nll_loss(ys_pred, ys)
@@ -222,10 +222,10 @@ def train_leaves_epoch(tree: ProtoTree,
         for leaf in tree.leaves:
             update_sum[leaf] = torch.zeros_like(leaf._dist_params)
         
-        for i, (xs, _, ys) in train_iter:
-            xs, ys = xs.to(device), ys.to(device)
+        for i, (xs, ams, ys) in train_iter:
+            xs, ams, ys = xs.to(device), ams.to(device), ys.to(device)
             #Train leafs without gradient descent
-            out, info = tree.forward(xs)
+            out, info = tree.forward(xs, ams)
             target = eye[ys] #shape (batchsize, num_classes) 
             for leaf in tree.leaves:  
                 if tree._log_probabilities:
