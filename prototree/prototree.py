@@ -104,6 +104,7 @@ class ProtoTree(nn.Module):
 
     def forward(self,
                 xs: torch.Tensor,
+                attention_masks: torch.Tensor,
                 sampling_strategy: str = SAMPLING_STRATEGIES[0],  # `distributed` by default
                 **kwargs,
                 ) -> tuple:
@@ -114,7 +115,7 @@ class ProtoTree(nn.Module):
         '''
 
         # Perform a forward pass with the conv net
-        features = self._net(xs)
+        features, _ = self._net(input_ids=xs, attention_mask = attention_masks)
         features = self._add_on(features)
         bs, D, W, H = features.shape
 
