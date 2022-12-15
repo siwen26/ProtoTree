@@ -40,11 +40,11 @@ def eval(tree: ProtoTree,
                         ncols=0)
 
     # Iterate through the test set
-    for i, (xs, ys) in test_iter:
-        xs, ys = xs.to(device), ys.to(device)
+    for i, (xs, ams, ys) in test_iter:
+        xs, ams, ys = xs.to(device), ams.to(device), ys.to(device)
 
         # Use the model to classify this batch of input data
-        out, test_info = tree.forward(xs, sampling_strategy)
+        out, test_info = tree.forward(xs, ams, sampling_strategy)
         ys_pred = torch.argmax(out, dim=1)
 
         # Update the confusion matrix
