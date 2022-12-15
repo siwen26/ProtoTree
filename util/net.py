@@ -65,9 +65,9 @@ def freeze(tree: ProtoTree, epoch: int, params_to_freeze: list, params_to_train:
 
 
 class BERT_EMBEDDING(BertModel):
-    def __init__(self, args: argparse.Namespace):
-        super(BERT_EMBEDDING, self).__init__()
-        self.bert = BertModel.from_pretrained(args.pretrain_model)
+    def __init__(self, config, pretrain_model = 'bert-base-cased'):
+        super(BERT_EMBEDDING, self).__init__(config)
+        self.bert = BertModel.from_pretrained(pretrain_model)
     
     def forward(self, input_ids, token_type_ids=None, attention_mask=None, labels=None):
         sequence_output, pooler_output = self.bert(input_ids, attention_mask, return_dict=False)
@@ -83,7 +83,7 @@ class ADD_ON_LAYERS(nn.Module):
         super(ADD_ON_LAYERS, self).__init__()
         self.linear = nn.Linear(args.bert_embedding_size, args.projected_embedding_size)
         self.add_on_layers = nn.Sequential(
-                    nn.Conv2d(in_channels=args.max_length, out_channels=arg.num_features, kernel_size=1, bias=False),
+                    nn.Conv2d(in_channels=args.max_length, out_channels=args.num_features, kernel_size=1, bias=False),
                     nn.Sigmoid()
                     )
     
@@ -98,7 +98,7 @@ class ADD_ON_LAYERS(nn.Module):
 def get_network(args: argparse.Namespace):
     # Define a conv net for estimating the probabilities at each decision node
     
-    features = BERT_EMBEDDING(args)
+    features = BERT_EMBEDDING.from_pretrained("bert-base-cased")
     add_on_layers = ADD_ON_LAYERS(args)
     
     # return two defined models: 1. bert embedding feature extraction pretrainde model; 2. add on conv2d model.
