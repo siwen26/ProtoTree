@@ -98,7 +98,7 @@ class ADD_ON_LAYERS(nn.Module):
 def get_network(args: argparse.Namespace):
     # Define a conv net for estimating the probabilities at each decision node
     
-    features = BERT_EMBEDDING(args = args)
+    features = BERT_EMBEDDING.from_pretrained(args.pretrain_model)
     add_on_layers = ADD_ON_LAYERS(args)
     
     # return two defined models: 1. bert embedding feature extraction pretrainde model; 2. add on conv2d model.
