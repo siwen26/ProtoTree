@@ -41,6 +41,10 @@ def get_args() -> argparse.Namespace:
                         type=int,
                         default=128,
                         help='The maximum length kept for each input texts.')
+    parser.add_argument('--text_reshaped_size',
+                        type=int,
+                        default=16,
+                        help='w, h of the reshaped text feature matrix for conv2d layers.')
     parser.add_argument('--depth',
                         type=int,
                         default=9,
