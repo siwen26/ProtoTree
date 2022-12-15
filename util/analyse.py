@@ -61,7 +61,7 @@ def analyse_leaf_distributions(tree: ProtoTree, log: Log):
 def analyse_output_shape(tree: ProtoTree, trainloader: DataLoader, log: Log, device):
     with torch.no_grad():
         # Get a batch of training data
-        xs, ys = next(iter(trainloader))
+        xs, _, ys = next(iter(trainloader))
         xs, ys = xs.to(device), ys.to(device)
         log.log_message("Image input shape: "+str(xs[0,:,:,:].shape))
         log.log_message("Features output shape (without 1x1 conv layer): "+str(tree._net(xs).shape))
