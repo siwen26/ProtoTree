@@ -22,7 +22,7 @@ class ProtoTree(nn.Module):
 
     def __init__(self,
                  num_classes: int,
-                 feature_net: torch.nn.Module,
+                 feature_net,
                  args: argparse.Namespace,
                  add_on_layers: nn.Module = nn.Identity(),
                  ):
