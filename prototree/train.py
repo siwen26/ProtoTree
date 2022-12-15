@@ -222,7 +222,7 @@ def train_leaves_epoch(tree: ProtoTree,
         for leaf in tree.leaves:
             update_sum[leaf] = torch.zeros_like(leaf._dist_params)
         
-        for i, (xs, ys) in train_iter:
+        for i, (xs, _, ys) in train_iter:
             xs, ys = xs.to(device), ys.to(device)
             #Train leafs without gradient descent
             out, info = tree.forward(xs)
