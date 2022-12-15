@@ -44,12 +44,13 @@ def run_tree(args=None):
     # Obtain the dataset and dataloaders
     trainloader, testloader, classes = get_dataloaders(args)
     # Create a convolutional network based on arguments and add 1x1 conv layer
-    features_net, add_on_layers = get_network(args)
+    features_net, project_layer, add_on_layers = get_network(args)
     # Create a ProtoTree
     tree = ProtoTree(num_classes=len(classes),
                     feature_net = features_net,
                     args = args,
-                    add_on_layers = add_on_layers)
+                    add_on_layers = add_on_layers,
+                    project_layer=project_layer)
     tree = tree.to(device=device)
     # Determine which optimizer should be used to update the tree parameters
     optimizer, params_to_freeze, params_to_train = get_optimizer(tree, args)
