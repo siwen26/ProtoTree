@@ -153,7 +153,7 @@ def train_epoch_kontschieder(tree: ProtoTree,
                         ncols=0)
     # Make sure the model is in train mode
     tree.train()
-    for i, (xs, ys) in train_iter:
+    for i, (xs, _, ys) in train_iter:
         xs, ys = xs.to(device), ys.to(device)
 
         # Reset the gradients
