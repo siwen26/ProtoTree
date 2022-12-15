@@ -61,11 +61,12 @@ def analyse_leaf_distributions(tree: ProtoTree, log: Log):
 def analyse_output_shape(tree: ProtoTree, trainloader: DataLoader, log: Log, device):
     with torch.no_grad():
         # Get a batch of training data
-        xs, _, ys = next(iter(trainloader))
+        xs, ams, ys = next(iter(trainloader))
         xs, ys = xs.to(device), ys.to(device)
-        log.log_message("Image input shape: "+str(xs[0,:,:,:].shape))
-        log.log_message("Features output shape (without 1x1 conv layer): "+str(tree._net(xs).shape))
-        log.log_message("Convolutional output shape (with 1x1 conv layer): "+str(tree._add_on(tree._net(xs)).shape))
+        log.log_message("Image input shape: "+str(xs[0,:].shape)) # shape of text tokenized id.
+        features, _ = tree._net(xs,ams)
+        log.log_message("Features output shape (without 1x1 conv layer): "+str(features.shape))
+        log.log_message("Convolutional output shape (with 1x1 conv layer): "+str(tree._add_on(features).shape))
         log.log_message("Prototypes shape: "+str(tree.prototype_layer.prototype_vectors.shape))
 
 def analyse_leafs(tree: ProtoTree, epoch: int, k: int, leaf_labels: dict, threshold: float, log: Log):
