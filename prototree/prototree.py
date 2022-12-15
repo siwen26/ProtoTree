@@ -25,6 +25,7 @@ class ProtoTree(nn.Module):
                  feature_net,
                  args: argparse.Namespace,
                  add_on_layers: nn.Module = nn.Identity(),
+                 project_layer: nn.Module = nn.Identity()
                  ):
         super().__init__()
         assert args.depth > 0
@@ -48,6 +49,7 @@ class ProtoTree(nn.Module):
         # Set the feature network
         self._net = feature_net
         self._add_on = add_on_layers
+        self._project_layer = project_layer
 
         # Flag that indicates whether probabilities or log probabilities are computed
         self._log_probabilities = args.log_probabilities
@@ -116,6 +118,8 @@ class ProtoTree(nn.Module):
 
         # Perform a forward pass with the conv net
         features, _ = self._net(input_ids=xs, attention_mask = attention_masks)
+        features = self._project_layer(features)
+        features = torch.reshape(features, (64, 128, 16, 16))
         features = self._add_on(features)
         bs, D, W, H = features.shape
 
@@ -219,7 +223,9 @@ class ProtoTree(nn.Module):
     def forward_partial(self, xs: torch.Tensor, attention_masks: torch.Tensor,) -> tuple:
 
         # Perform a forward pass with the conv net
-        features = self._net(input_ids=xs, attention_mask = attention_masks)
+        features, _ = self._net(input_ids=xs, attention_mask = attention_masks)
+        features = self._project_layer(features)
+        features = torch.reshape(features, (64, 128, 16, 16))
         features = self._add_on(features)
 
         # Use the features to compute the distances from the prototypes
