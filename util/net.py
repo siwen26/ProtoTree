@@ -82,17 +82,19 @@ class ADD_ON_LAYERS(nn.Module):
       # in_feature: dimension of BERT embedding size: 768
       # out_feature: dimension of projected feature: 256
         super(ADD_ON_LAYERS, self).__init__()
-        self.linear = nn.Linear(args.bert_embedding_size, args.projected_embedding_size)
+      # self.linear = nn.Linear(args.bert_embedding_size, args.projected_embedding_size)
         self.add_on_layers = nn.Sequential(
+                    nn.Linear(args.bert_embedding_size, args.projected_embedding_size)
+                    nn.Unflatten(2, torch.Size([args.text_reshaped_size, args.text_reshaped_size]))
                     nn.Conv2d(in_channels=args.max_length, out_channels=args.num_features, kernel_size=1, bias=False),
                     nn.Sigmoid()
                     )
     
-    def forward(self, features, args: argparse.Namespace):
+    def forward(self, features):
         # def forward(self, features, batch_size=64, num_channel=128, size=16):
-        output = self.linear(features)
-        reshaped_features = torch.reshape(output, (args.batch_size, args.max_length, args.text_reshaped_size, args.text_reshaped_size))
-        result = self.add_on_layers(reshaped_features)
+        # output = self.linear(features)
+        # reshaped_features = torch.reshape(output, (args.batch_size, args.max_length, args.text_reshaped_size, args.text_reshaped_size))
+        result = self.add_on_layers(features)
         return result
 
 
