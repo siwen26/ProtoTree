@@ -71,7 +71,8 @@ def run_tree(args=None):
         for epoch in range(epoch, args.epochs + 1):
             log.log_message("\nEpoch %s"%str(epoch))
             # Freeze (part of) network for some epochs if indicated in args
-            freeze(tree, epoch, params_to_freeze, params_to_train, args, log)
+            # don't freeze: train all bert embedding part.
+            # freeze(tree, epoch, params_to_freeze, params_to_train, args, log)
             log_learning_rates(optimizer, args, log)
             
             # Train tree
