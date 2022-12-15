@@ -216,10 +216,10 @@ class ProtoTree(nn.Module):
             return dists, info
         raise Exception('Sampling strategy not recognized!')
 
-    def forward_partial(self, xs: torch.Tensor) -> tuple:
+    def forward_partial(self, xs: torch.Tensor, attention_masks: torch.Tensor,) -> tuple:
 
         # Perform a forward pass with the conv net
-        features = self._net(xs)
+        features = self._net(input_ids=xs, attention_mask = attention_masks)
         features = self._add_on(features)
 
         # Use the features to compute the distances from the prototypes
