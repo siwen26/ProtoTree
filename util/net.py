@@ -84,8 +84,8 @@ class ADD_ON_LAYERS(nn.Module):
         super(ADD_ON_LAYERS, self).__init__()
       # self.linear = nn.Linear(args.bert_embedding_size, args.projected_embedding_size)
         self.add_on_layers = nn.Sequential(
-                    nn.Linear(args.bert_embedding_size, args.projected_embedding_size)
-                    nn.Unflatten(2, torch.Size([args.text_reshaped_size, args.text_reshaped_size]))
+                    nn.Linear(args.bert_embedding_size, args.projected_embedding_size),
+                    nn.Unflatten(2, torch.Size([args.text_reshaped_size, args.text_reshaped_size])),
                     nn.Conv2d(in_channels=args.max_length, out_channels=args.num_features, kernel_size=1, bias=False),
                     nn.Sigmoid()
                     )
