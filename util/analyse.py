@@ -65,7 +65,11 @@ def analyse_output_shape(tree: ProtoTree, trainloader: DataLoader, log: Log, dev
         xs, ys = xs.to(device), ys.to(device)
         log.log_message("Image input shape: "+str(xs[0,:].shape)) # shape of text tokenized id.
         features, _ = tree._net(xs,ams)
+        
         log.log_message("Features output shape (without 1x1 conv layer): "+str(features.shape))
+        features = tree._project_layer(features)
+        features = torch.reshape(features, (64, 128, 16, 16))
+        
         log.log_message("Convolutional output shape (with 1x1 conv layer): "+str(tree._add_on(features).shape))
         log.log_message("Prototypes shape: "+str(tree.prototype_layer.prototype_vectors.shape))
 
