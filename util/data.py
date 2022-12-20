@@ -327,7 +327,7 @@ def get_dataloaders(args: argparse.Namespace):
     if args.dataset == 'CUB-200-2011':
     # get trainset/testset text and label
         train_texts, test_texts, train_labels, test_labels = preprocess_dataset(args)
-    elif args.dataset = 'GLAMI-1M':
+    elif args.dataset == 'GLAMI-1M':
         train_texts, test_texts, train_labels, test_labels = preprocess_dataset_glami(args.dataset_pth)
         
 
