@@ -228,6 +228,51 @@ def preprocess_dataset(args: argparse.Namespace):
     return train_texts, test_texts, train_labels, test_labels
 
 
+def get_dataframe(split_type: str, dataset_dir='./GLAMI-1M-dataset'):
+    assert split_type in ("train", "test")
+    df = pd.read_csv(dataset_dir + f"/GLAMI-1M-{split_type}.csv")
+    df["image_file"] = dataset_dir + "/images/" + df["image_id"].astype(str) + ".jpg"
+    df["description"] = df["description"].fillna('')
+    assert os.path.exists(df.loc[0, "image_file"])
+    return df
+
+def get_description(df):
+    texts = {}
+    for t, cat in zip(df['description'], df['category_name']):
+      if len(t)>0:
+        texts[t] = cat
+    return texts
+
+def category_idx_dict(df):
+    cats = list(set(df['category_name']))
+    cat_to_idx = {}
+    for i, name in enumerate(cats):
+        cat_to_idx[name] = i 
+    return cat_to_idx
+
+def preprocess_dataset_glami(dataset_pth, train = 'train', test = 'test'):
+    train_df = get_dataframe(train)
+    test_df = get_dataframe(test)
+
+    train = get_description(train_df)
+    test = get_description(test_df)
+
+    train_texts = list(train.keys())
+    test_texts = list(test.keys())
+
+    cat_to_idx = category_idx_dict(train_df)
+
+    train_label = []
+    for label in list(train.values()):
+        train_label.append(cat_to_idx[label])
+    test_label = []
+    for label in list(test.values()):
+        test_label.append(label)
+    
+    return train_texts, test_texts, train_label, test_label
+
+
+
 def tokenization(texts, max_length, pretrain_model='bert-base-cased'):
     # Load the BERT tokenizer.
     # print('Loading BERT tokenizer...')
@@ -279,8 +324,12 @@ def encoded_dataset(texts, labels, max_length, pretrain_model='bert-base-cased')
 def get_dataloaders(args: argparse.Namespace):
     # def get_dataloaders(dataset_pth:str, prefix_dir:str, batch_size, max_length, pretrain_model='bert-base-cased')
     
+    if args.dataset == 'CUB-200-2011':
     # get trainset/testset text and label
-    train_texts, test_texts, train_labels, test_labels = preprocess_dataset(args)
+        train_texts, test_texts, train_labels, test_labels = preprocess_dataset(args)
+    elif args.dataset = 'GLAMI-1M':
+        train_texts, test_texts, train_labels, test_labels = preprocess_dataset_glami(args.dataset_pth)
+        
 
     # tokenization and get dataset
     train_dataset = encoded_dataset(train_texts, train_labels, args.max_length, args.pretrain_model)
