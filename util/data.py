@@ -267,7 +267,7 @@ def preprocess_dataset_glami(dataset_pth, train = 'train', test = 'test'):
         train_label.append(cat_to_idx[label])
     test_label = []
     for label in list(test.values()):
-        test_label.append(label)
+        test_label.append(cat_to_idx[label])
     
     return train_texts, test_texts, train_label, test_label
 
