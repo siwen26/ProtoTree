@@ -67,7 +67,7 @@ def freeze(tree: ProtoTree, epoch: int, params_to_freeze: list, params_to_train:
 
 class BERT_EMBEDDING(BertModel):
     def __init__(self, config, args: argparse.Namespace):
-        super(BERT_EMBEDDING, self).__init__(config)
+        super(BERT_EMBEDDING, self).__init__(config, args)
         self.bert = BertModel.from_pretrained(args.pretrain_model)
     
     def forward(self, input_ids, token_type_ids=None, attention_mask=None, labels=None):
