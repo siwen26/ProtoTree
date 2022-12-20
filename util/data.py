@@ -228,7 +228,7 @@ def preprocess_dataset(args: argparse.Namespace):
     return train_texts, test_texts, train_labels, test_labels
 
 
-def get_dataframe(split_type: str, dataset_dir='./GLAMI-1M-dataset'):
+def get_dataframe(split_type: str, dataset_dir):
     assert split_type in ("train", "test")
     df = pd.read_csv(dataset_dir + f"/GLAMI-1M-{split_type}.csv")
     df["image_file"] = dataset_dir + "/images/" + df["image_id"].astype(str) + ".jpg"
@@ -251,8 +251,8 @@ def category_idx_dict(df):
     return cat_to_idx
 
 def preprocess_dataset_glami(dataset_pth, train = 'train', test = 'test'):
-    train_df = get_dataframe(train)
-    test_df = get_dataframe(test)
+    train_df = get_dataframe(train, dataset_pth)
+    test_df = get_dataframe(test, dataset_pth)
 
     train = get_description(train_df)
     test = get_description(test_df)
