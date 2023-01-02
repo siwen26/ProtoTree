@@ -42,7 +42,7 @@ def project(tree: ProtoTree,
         # Get a batch of data
         xs, ys = next(iter(project_loader))
         batch_size = xs.shape[0]
-        for i, (xs, ys) in projection_iter:
+        for i, (xs, _, ys) in projection_iter:
             xs, ys = xs.to(device), ys.to(device)
             # Get the features and distances
             # - features_batch: features tensor (shared by all prototypes)
@@ -139,7 +139,7 @@ def project_with_class_constraints(tree: ProtoTree,
 
     with torch.no_grad():
         # Get a batch of data
-        xs, ys = next(iter(project_loader))
+        xs, _, ys = next(iter(project_loader))
         batch_size = xs.shape[0]
         # For each internal node, collect the leaf labels in the subtree with this node as root. 
         # Only images from these classes can be used for projection.
@@ -150,7 +150,7 @@ def project_with_class_constraints(tree: ProtoTree,
             for leaf in branch.leaves:
                 leaf_labels_subtree[branch.index].add(torch.argmax(leaf.distribution()).item())
         
-        for i, (xs, ys) in projection_iter:
+        for i, (xs, _, ys) in projection_iter:
             xs, ys = xs.to(device), ys.to(device)
             # Get the features and distances
             # - features_batch: features tensor (shared by all prototypes)
