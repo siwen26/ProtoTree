@@ -21,6 +21,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 
+
+
 # adapted from protopnet
 def upsample(tree: ProtoTree, project_info: dict, project_loader: DataLoader, folder_name: str, args: argparse.Namespace):
     dir = os.path.join(os.path.join(args.log_dir, args.dir_for_saving_images), folder_name)
@@ -38,12 +40,19 @@ def upsample(tree: ProtoTree, project_info: dict, project_loader: DataLoader, fo
                 decision_node_idx = prototype_info['node_ix']
                 x = imgs[prototype_info['input_image_ix']][0]
                 token_labels = x.tolist()
-                token_labels = list(map(str, token_labels))
+                str_token_labels = list(map(str, token_labels))
 
-                attentions_array = attn_maps[j]
-                
+                attentions_array = attn_maps[j] 
                 fname=os.path.join(dir, '%s_bert_embedding_attention_image.png'%str(decision_node_idx))
-                draw_attention_map(attentions_array, token_labels, fname)
+
+                fig, ax = plt.subplots()
+                plt.rcParams['figure.figsize'] = (8, 5)
+                im = heatmap(attentions_array, token_labels, ax=ax,
+                   cmap="YlGn", cbarlabel="Attention Weights")
+                fig.tight_layout()
+                plt.savefig(fname)
+                plt.clf()
+                # draw_attention_map(attentions_array, str_token_labels, fname)
                 
                 
 #                 x.save(os.path.join(dir,'%s_original_image.png'%str(decision_node_idx)))
@@ -137,7 +146,7 @@ def draw_word_embedding_figure(word_input_ids, decision_node_idx):
 def draw_attention_map(array_attention, token_labels, filename):
       fig, ax = plt.subplots()
       plt.rcParams['figure.figsize'] = (8, 5)
-      im, cbar = heatmap(array_attention, token_labels, ax=ax,
+      im = heatmap(array_attention, token_labels, ax=ax,
                    cmap="YlGn", cbarlabel="Attention Weights")
 #       texts = annotate_heatmap(im, valfmt="{x:.3f}")
       fig.tight_layout()
@@ -205,7 +214,7 @@ def heatmap(data, row_labels, ax=None,
     ax.grid(which="minor", color="w", linestyle='-', linewidth=3)
     ax.tick_params(which="minor", bottom=False, left=False)
 
-    return im, cbar
+    return im
 
 
 def annotate_heatmap(im, data=None, valfmt="{x:.2f}",
