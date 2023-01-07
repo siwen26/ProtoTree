@@ -111,8 +111,8 @@ def project_with_class_constraints(tree: ProtoTree,
                                     project_loader: DataLoader,
                                     device,
                                     args: argparse.Namespace,
-                                    log: Log,  
-                                    log_prefix: str = 'log_projection_with_constraints',  # TODO
+#                                     log: Log,  
+#                                     log_prefix: str = 'log_projection_with_constraints',  # TODO
                                     progress_prefix: str = 'Projection'
                                     ) -> dict:
         
