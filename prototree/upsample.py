@@ -37,10 +37,10 @@ def upsample(tree: ProtoTree, project_info: dict, project_loader: DataLoader, fo
                 prototype_info = project_info[j]
                 decision_node_idx = prototype_info['node_ix']
                 x = imgs[prototype_info['input_image_ix']][0]
-                token_labels = x.tolist()[0]
+                token_labels = x.tolist()
                 token_labels = list(map(str, token_labels))
 
-                attentions_array = attn_maps[j]*100 # to see the value
+                attentions_array = attn_maps[j]
                 
                 fname=os.path.join(dir, '%s_bert_embedding_attention_image.png'%str(decision_node_idx))
                 draw_attention_map(attentions_array, token_labels, fname)
