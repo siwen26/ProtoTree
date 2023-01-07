@@ -127,7 +127,7 @@ def draw_word_embedding_figure(word_input_ids, decision_node_idx):
         plt.savefig('%s_bert_embedding_tsne_image.png'%str(decision_node_idx))
 
   
-def draw_attention_map(array_attention， decision_node_idx, filename):
+def draw_attention_map(array_attention, decision_node_idx, filename):
       plt.rcParams['figure.figsize'] = (10, 5)
       color_palette = sns.diverging_palette(250, 0, as_cmap=True)
       heatmap = sns.heatmap(array_attention,
