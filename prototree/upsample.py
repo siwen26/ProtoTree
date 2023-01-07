@@ -54,12 +54,12 @@ def upsample(tree: ProtoTree, project_info: dict, project_loader: DataLoader, fo
                 plt.rcParams['figure.figsize'] = (8,5)
                 color_palette = sns.diverging_palette(250, 0, as_cmap=True)
                 heatmap = sns.heatmap(attentions_array,
-                cmap=color_palette,
-                center=0,
-                vmin=-0.005,
-                vmax=0.01,
-                xticklabels = str_token_labels,
-                yticklabels = str_token_labels)
+                    cmap=color_palette,
+                    center=0,
+                    vmin=-0.005,
+                    vmax=0.01,
+                    xticklabels = str_token_labels,
+                    yticklabels = str_token_labels)
                 heatmap.figure.savefig(fname)
                 
                 # draw_attention_map(attentions_array, str_token_labels, fname)
