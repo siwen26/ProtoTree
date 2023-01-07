@@ -21,13 +21,13 @@ import seaborn as sns
 
 
 # adapted from protopnet
-def upsample(tree: ProtoTree, project_info: dict, project_loader: DataLoader, folder_name: str, args: argparse.Namespace, log: Log):
+def upsample(tree: ProtoTree, project_info: dict, project_loader: DataLoader, folder_name: str, args: argparse.Namespace):
     dir = os.path.join(os.path.join(args.log_dir, args.dir_for_saving_images), folder_name)
     if not os.path.exists(dir):
         os.makedirs(dir)
     with torch.no_grad():
-        sim_maps, project_info, attn_maps = get_similarity_maps(tree, project_info, log)
-        log.log_message("\nUpsampling prototypes for visualization...")
+        sim_maps, project_info, attn_maps = get_similarity_maps(tree, project_info)
+#         log.log_message("\nUpsampling prototypes for visualization...")
         imgs = project_loader.dataset
         for node, j in tree._out_map.items():
             if node in tree.branches: #do not upsample when node is pruned
@@ -36,7 +36,7 @@ def upsample(tree: ProtoTree, project_info: dict, project_loader: DataLoader, fo
                 x = imgs[prototype_info['input_image_ix']][0]
                 attentions_array = attn_maps[j]
                 fname=os.path.join(dir, '%s_bert_embedding_tsne_image.png'%str(decision_node_idx))
-                draw_attention_map(attentions_array, decision_node_idx, fname)
+                draw_attention_map(attentions_array, fname)
                 
                 
 #                 x.save(os.path.join(dir,'%s_original_image.png'%str(decision_node_idx)))
@@ -127,7 +127,7 @@ def draw_word_embedding_figure(word_input_ids, decision_node_idx):
         plt.savefig('%s_bert_embedding_tsne_image.png'%str(decision_node_idx))
 
   
-def draw_attention_map(array_attention, decision_node_idx, filename):
+def draw_attention_map(array_attention, filename):
       plt.rcParams['figure.figsize'] = (10, 5)
       color_palette = sns.diverging_palette(250, 0, as_cmap=True)
       heatmap = sns.heatmap(array_attention,
@@ -140,8 +140,8 @@ def draw_attention_map(array_attention, decision_node_idx, filename):
         
         
 
-def get_similarity_maps(tree: ProtoTree, project_info: dict, log: Log = None):
-    log.log_message("\nCalculating similarity maps (after projection)...")
+def get_similarity_maps(tree: ProtoTree, project_info: dict):
+#     log.log_message("\nCalculating similarity maps (after projection)...")
     
     sim_maps = dict()
     attn_maps = dict()
