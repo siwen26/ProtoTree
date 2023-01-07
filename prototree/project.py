@@ -158,7 +158,7 @@ def project_with_class_constraints(tree: ProtoTree,
             # - distances_batch: distances tensor (for all prototypes)
             #   shape: (batch_size, num_prototypes, W, H)
             # - out_map: a dict mapping decision nodes to distances (indices)
-            features_batch, distances_batch, out_map = tree.forward_partial(xs, attention_masks)
+            features_batch, distances_batch, out_map, attentions = tree.forward_partial(xs, attention_masks)
 
             # Get the features dimensions
             bs, D, W, H = features_batch.shape
