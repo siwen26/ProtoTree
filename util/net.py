@@ -66,12 +66,12 @@ def freeze(tree: ProtoTree, epoch: int, params_to_freeze: list, params_to_train:
 
 
 class BERT_EMBEDDING(BertModel):
-    def __init__(self, config, pretrain_model = 'bert-base-multilingual-cased'):
+    def __init__(self, config, pretrain_model = 'bert-base-cased'):
         super(BERT_EMBEDDING, self).__init__(config)
         self.bert = BertModel.from_pretrained(pretrain_model)
     
-    def forward(self, input_ids, token_type_ids=None, attention_mask=None, labels=None):
-        sequence_output, pooler_output = self.bert(input_ids, attention_mask, output_attentions = True, return_dict=False)
+    def forward(self, input_ids, token_type_ids=None, attention_mask=None, output_attentions = True, labels=None):
+        sequence_output, pooler_output = self.bert(input_ids, attention_mask, output_attentions = output_attentions, return_dict=False)
         return sequence_output, pooler_output, attentions
 
   
@@ -101,7 +101,7 @@ class ADD_ON_LAYERS(nn.Module):
 def get_network(args: argparse.Namespace):
     # Define a conv net for estimating the probabilities at each decision node
     
-    features = BERT_EMBEDDING.from_pretrained('bert-base-multilingual-cased')
+    features = BERT_EMBEDDING.from_pretrained('bert-base-cased')
     project_layer = nn.Linear(args.bert_embedding_size, args.projected_embedding_size, bias=False)
     add_on_layers = nn.Sequential(
                     nn.Conv2d(in_channels=args.max_length, out_channels=args.num_features, kernel_size=1, bias=False),
