@@ -21,8 +21,6 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 
-
-
 # adapted from protopnet
 def upsample(tree: ProtoTree, project_info: dict, project_loader: DataLoader, folder_name: str, args: argparse.Namespace):
     dir = os.path.join(os.path.join(args.log_dir, args.dir_for_saving_images), folder_name)
@@ -40,6 +38,7 @@ def upsample(tree: ProtoTree, project_info: dict, project_loader: DataLoader, fo
                 decision_node_idx = prototype_info['node_ix']
                 x = imgs[prototype_info['input_image_ix']][0]
                 token_labels = x.tolist()[0]
+                token_labels = list(map(str, token_labels))
 
                 attentions_array = attn_maps[j]*100 # to see the value
                 
