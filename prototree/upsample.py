@@ -43,21 +43,26 @@ def upsample(tree: ProtoTree, project_info: dict, project_loader: DataLoader, fo
                 str_token_labels = list(map(str, token_labels))
 
                 attentions_array = attn_maps[j] 
-                
-                # print(attentions_array)
-                # print("=="*50)
-
-
-                # fname=os.path.join(dir, '%s_bert_embedding_attention_image.png'%str(decision_node_idx))
-
+                fname=os.path.join(dir, '%s_bert_embedding_attention_image.png'%str(decision_node_idx))
                 # fig, ax = plt.subplots()
                 # plt.rcParams['figure.figsize'] = (8, 5)
-                # im = heatmap(attentions_array, str_token_labels, ax=ax,
-                #    cmap="YlGn", cbarlabel="Attention Weights")
+                # im = heatmap(np.random.rand(128,128), str_token_labels, ax=ax, cbarlabel="Attention Weights")
                 # fig.tight_layout()
-                # plt.savefig(fname)
-                # plt.clf()
-                draw_attention_map(attentions_array, str_token_labels, fname)
+                # plt.savefig('/content/testing_fig.png')    
+
+                
+                plt.rcParams['figure.figsize'] = (8,5)
+                color_palette = sns.diverging_palette(250, 0, as_cmap=True)
+                heatmap = sns.heatmap(attentions_array,
+                cmap=color_palette,
+                center=0,
+                vmin=-0.005,
+                vmax=0.01,
+                xticklabels = str_token_labels,
+                yticklabels = str_token_labels)
+                heatmap.figure.savefig(fname)
+                
+                # draw_attention_map(attentions_array, str_token_labels, fname)
                 
                 
 #                 x.save(os.path.join(dir,'%s_original_image.png'%str(decision_node_idx)))
@@ -152,11 +157,10 @@ def draw_attention_map(array_attention, token_labels, filename):
       fig, ax = plt.subplots()
       plt.rcParams['figure.figsize'] = (8, 5)
       im = heatmap(array_attention, token_labels, ax=ax,
-                   cmap="YlGn", cbarlabel="Attention Weights")
-#       texts = annotate_heatmap(im, valfmt="{x:.3f}")
+                   cbarlabel="Attention Weights")
       fig.tight_layout()
       plt.savefig(filename)
-      plt.clf()
+      # plt.clf()
       
 
 
