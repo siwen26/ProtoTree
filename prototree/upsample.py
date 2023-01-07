@@ -176,7 +176,7 @@ def heatmap(data, row_labels, ax=None,
         cbar_kw = {}
 
     # Plot the heatmap
-    im = ax.imshow(data, **kwargs)
+    im = ax.imshow(data, cmap="Blues", vmin=np.min(data), vmax=np.min(data))
 
     # Create colorbar
     cbar = ax.figure.colorbar(im, ax=ax, **cbar_kw)
@@ -186,8 +186,8 @@ def heatmap(data, row_labels, ax=None,
     ax.set_xticks(np.arange(data.shape[1]))
     ax.set_yticks(np.arange(data.shape[0]))
 
-    ax.set_xticklabels(row_labels) 
-    ax.set_yticklabels(row_labels) 
+    ax.set_xticklabels(row_labels, fontdict={'fontsize': 5}) 
+    ax.set_yticklabels(row_labels, fontdict={'fontsize': 5}) 
 
     # Let the horizontal axes labeling appear on top.
     ax.tick_params(top=True, bottom=False,
