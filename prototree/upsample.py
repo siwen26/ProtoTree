@@ -16,6 +16,7 @@ from transformers import BertTokenizer
 import re
 from sklearn.manifold import TSNE
 import matplotlib.pyplot as plt
+import seaborn as sns
 %matplotlib inline
 
 
@@ -119,6 +120,18 @@ def draw_word_embedding_figure(word_input_ids, decision_node_idx):
                          ha='right',
                          va='bottom')
         plt.savefig('%s_bert_embedding_tsne_image.png'%str(decision_node_idx))
+
+  
+def draw_attention_map(array_attention， decision_node_idx):
+      plt.rcParams['figure.figsize'] = (10, 5)
+      color_palette = sns.diverging_palette(250, 0, as_cmap=True)
+      heatmap = sns.heatmap(array_attention,
+                cmap=color_palette,
+                center=0,
+                vmin=0,
+                vmax=1,
+               );
+      heatmap.figure.savefig('%s_bert_embedding_attention_map.png'%str(decision_node_idx))
         
         
 
