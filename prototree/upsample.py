@@ -26,7 +26,7 @@ def upsample(tree: ProtoTree, project_info: dict, project_loader: DataLoader, fo
     if not os.path.exists(dir):
         os.makedirs(dir)
     with torch.no_grad():
-        sim_maps, project_info = get_similarity_maps(tree, project_info, log)
+        sim_maps, project_info, attn_maps = get_similarity_maps(tree, project_info, log)
         log.log_message("\nUpsampling prototypes for visualization...")
         imgs = project_loader.dataset
         for node, j in tree._out_map.items():
@@ -34,6 +34,8 @@ def upsample(tree: ProtoTree, project_info: dict, project_loader: DataLoader, fo
                 prototype_info = project_info[j]
                 decision_node_idx = prototype_info['node_ix']
                 x = imgs[prototype_info['input_image_ix']][0]
+                attentions_array = attn_maps[j]
+                
 #                 x.save(os.path.join(dir,'%s_original_image.png'%str(decision_node_idx)))
                     
 #                 x_np = np.asarray(x)
