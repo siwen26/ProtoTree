@@ -35,6 +35,9 @@ def upsample(tree: ProtoTree, project_info: dict, project_loader: DataLoader, fo
                 decision_node_idx = prototype_info['node_ix']
                 x = imgs[prototype_info['input_image_ix']][0]
                 attentions_array = attn_maps[j]
+                fname=os.path.join(dir, '%s_bert_embedding_tsne_image.png'%str(decision_node_idx))
+                draw_attention_map(attentions_array, decision_node_idx, fname)
+                
                 
 #                 x.save(os.path.join(dir,'%s_original_image.png'%str(decision_node_idx)))
                     
@@ -89,7 +92,7 @@ def upsample(tree: ProtoTree, project_info: dict, project_loader: DataLoader, fo
 #                                     bbox_height_end=high_act_patch_indices[1],
 #                                     bbox_width_start=high_act_patch_indices[2],
 #                                     bbox_width_end=high_act_patch_indices[3], color=(0, 255, 255))
-                  draw_word_embedding_fugure(x, decision_node_idx)
+#                   draw_word_embedding_fugure(x, decision_node_idx)
     
     return project_info
 
@@ -124,7 +127,7 @@ def draw_word_embedding_figure(word_input_ids, decision_node_idx):
         plt.savefig('%s_bert_embedding_tsne_image.png'%str(decision_node_idx))
 
   
-def draw_attention_map(array_attention， decision_node_idx):
+def draw_attention_map(array_attention， decision_node_idx, filename):
       plt.rcParams['figure.figsize'] = (10, 5)
       color_palette = sns.diverging_palette(250, 0, as_cmap=True)
       heatmap = sns.heatmap(array_attention,
@@ -133,7 +136,7 @@ def draw_attention_map(array_attention， decision_node_idx):
                 vmin=0,
                 vmax=1,
                );
-      heatmap.figure.savefig('%s_bert_embedding_attention_map.png'%str(decision_node_idx))
+      heatmap.figure.savefig(filename)
         
         
 
