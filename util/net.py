@@ -71,7 +71,7 @@ class BERT_EMBEDDING(BertModel):
         self.bert = BertModel.from_pretrained(pretrain_model)
     
     def forward(self, input_ids, token_type_ids=None, attention_mask=None, output_attentions = True, labels=None):
-        sequence_output, pooler_output = self.bert(input_ids, attention_mask, output_attentions = output_attentions, return_dict=False)
+        sequence_output, pooler_output, attentions = self.bert(input_ids, attention_mask, output_attentions = output_attentions, return_dict=False)
         return sequence_output, pooler_output, attentions
 
   
