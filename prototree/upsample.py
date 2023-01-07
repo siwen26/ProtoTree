@@ -150,7 +150,7 @@ def get_similarity_maps(tree: ProtoTree, project_info: dict, log: Log = None):
         with torch.no_grad():
             _, distances_batch, _, attentions = tree.forward_partial(nearest_x, attention_masks=None)
             sim_maps[j] = torch.exp(-distances_batch[0,j,:,:]).cpu().numpy()
-            attn_maps[j] = torch.mean(attentions[-1], dim = 1)[0].detach().numpy() # extract last attention layer attention weights.
+            attn_maps[j] = torch.mean(attentions[-1], dim = 1)[0].cpu().numpy() # extract last attention layer attention weights.
         del nearest_x
         del project_info[j]['nearest_input']
     return sim_maps, project_info, attn_maps
