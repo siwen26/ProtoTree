@@ -71,8 +71,8 @@ class BERT_EMBEDDING(BertModel):
         self.bert = BertModel.from_pretrained(pretrain_model)
     
     def forward(self, input_ids, token_type_ids=None, attention_mask=None, labels=None):
-        sequence_output, pooler_output = self.bert(input_ids, attention_mask, return_dict=False)
-        return sequence_output, pooler_output
+        sequence_output, pooler_output = self.bert(input_ids, attention_mask, output_attentions = True, return_dict=False)
+        return sequence_output, pooler_output, attentions
 
   
 class ADD_ON_LAYERS(nn.Module):
