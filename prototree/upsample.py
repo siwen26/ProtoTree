@@ -17,7 +17,7 @@ import re
 from sklearn.manifold import TSNE
 import matplotlib.pyplot as plt
 import seaborn as sns
-%matplotlib inline
+
 
 
 # adapted from protopnet
