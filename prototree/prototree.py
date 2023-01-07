@@ -117,7 +117,7 @@ class ProtoTree(nn.Module):
         '''
 
         # Perform a forward pass with the conv net
-        features, _ = self._net(input_ids=xs, attention_mask = attention_masks)
+        features, _, attentions = self._net(input_ids=xs, attention_mask = attention_masks, output_attentions = True)
         features = self._project_layer(features)
         features = torch.reshape(features, (-1, 128, 16, 16))
         features = self._add_on(features)
@@ -223,7 +223,7 @@ class ProtoTree(nn.Module):
     def forward_partial(self, xs: torch.Tensor, attention_masks: torch.Tensor,) -> tuple:
 
         # Perform a forward pass with the conv net
-        features, _ = self._net(input_ids=xs, attention_mask = attention_masks)
+        features, _, attentions = self._net(input_ids=xs, attention_mask = attention_masks, output_attentions = True)
         features = self._project_layer(features)
         features = torch.reshape(features, (-1, 128, 16, 16))
         features = self._add_on(features)
@@ -231,7 +231,7 @@ class ProtoTree(nn.Module):
         # Use the features to compute the distances from the prototypes
         distances = self.prototype_layer(features)  # Shape: (batch_size, num_prototypes, W, H)
 
-        return features, distances, dict(self._out_map)
+        return features, distances, dict(self._out_map), attentions
 
     @property
     def depth(self) -> int:
