@@ -150,15 +150,15 @@ def project_with_class_constraints(tree: ProtoTree,
             for leaf in branch.leaves:
                 leaf_labels_subtree[branch.index].add(torch.argmax(leaf.distribution()).item())
         
-        for i, (xs, _, ys) in projection_iter:
-            xs, ys = xs.to(device), ys.to(device)
+        for i, (xs, attention_masks, ys) in projection_iter:
+            xs, attention_masks, ys = xs.to(device), attention_masks.to(device), ys.to(device)
             # Get the features and distances
             # - features_batch: features tensor (shared by all prototypes)
             #   shape: (batch_size, D, W, H)
             # - distances_batch: distances tensor (for all prototypes)
             #   shape: (batch_size, num_prototypes, W, H)
             # - out_map: a dict mapping decision nodes to distances (indices)
-            features_batch, distances_batch, out_map = tree.forward_partial(xs)
+            features_batch, distances_batch, out_map = tree.forward_partial(xs, attention_masks)
 
             # Get the features dimensions
             bs, D, W, H = features_batch.shape
