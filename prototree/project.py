@@ -11,12 +11,12 @@ def project(tree: ProtoTree,
             project_loader: DataLoader,
             device,
             args: argparse.Namespace,
-            log: Log,  
-            log_prefix: str = 'log_projection',  # TODO
+#             log: Log,  
+#             log_prefix: str = 'log_projection',  # TODO
             progress_prefix: str = 'Projection'
             ) -> dict:
         
-    log.log_message("\nProjecting prototypes to nearest training patch (without class restrictions)...")
+#     log.log_message("\nProjecting prototypes to nearest training patch (without class restrictions)...")
     # Set the model to evaluation mode
     tree.eval()
     torch.cuda.empty_cache()
