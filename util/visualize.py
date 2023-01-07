@@ -78,36 +78,39 @@ def _leaf_vis(node: Leaf):
 def _branch_vis(node: Branch, upsample_dir: str):
     branch_id = node.index
     
-    img = Image.open(os.path.join(upsample_dir, '%s_nearest_patch_of_image.png'%branch_id))
-    bb = Image.open(os.path.join(upsample_dir, '%s_bounding_box_nearest_patch_of_image.png'%branch_id))
-    map = Image.open(os.path.join(upsample_dir, '%s_heatmap_original_image.png'%branch_id))
-    w, h = img.size
-    wbb, hbb = bb.size
+    img = Image.open(os.path.join(upsample_dir, '%s_bert_embedding_tsne_image.png'%branch_id))    
+    return img
+
+#     img = Image.open(os.path.join(upsample_dir, '%s_nearest_patch_of_image.png'%branch_id))
+#     bb = Image.open(os.path.join(upsample_dir, '%s_bounding_box_nearest_patch_of_image.png'%branch_id))
+#     map = Image.open(os.path.join(upsample_dir, '%s_heatmap_original_image.png'%branch_id))
+#     w, h = img.size
+#     wbb, hbb = bb.size
     
-    if wbb < 100 and hbb < 100:
-        cs = wbb, hbb
-    else:
-        cs = 100/wbb, 100/hbb
-        min_cs = min(cs)
-        bb = bb.resize(size=(int(min_cs * wbb), int(min_cs * hbb)))
-        wbb, hbb = bb.size
+#     if wbb < 100 and hbb < 100:
+#         cs = wbb, hbb
+#     else:
+#         cs = 100/wbb, 100/hbb
+#         min_cs = min(cs)
+#         bb = bb.resize(size=(int(min_cs * wbb), int(min_cs * hbb)))
+#         wbb, hbb = bb.size
 
-    if w < 100 and h < 100:
-        cs = w, h
-    else:
-        cs = 100/w, 100/h
-        min_cs = min(cs)
-        img = img.resize(size=(int(min_cs * w), int(min_cs * h)))
-        w, h = img.size
+#     if w < 100 and h < 100:
+#         cs = w, h
+#     else:
+#         cs = 100/w, 100/h
+#         min_cs = min(cs)
+#         img = img.resize(size=(int(min_cs * w), int(min_cs * h)))
+#         w, h = img.size
 
-    between = 4
-    total_w = w+wbb + between
-    total_h = max(h, hbb)
+#     between = 4
+#     total_w = w+wbb + between
+#     total_h = max(h, hbb)
     
 
-    together = Image.new(img.mode, (total_w, total_h), color=(255,255,255))
-    together.paste(img, (0, 0))
-    together.paste(bb, (w+between, 0))
+#     together = Image.new(img.mode, (total_w, total_h), color=(255,255,255))
+#     together.paste(img, (0, 0))
+#     together.paste(bb, (w+between, 0))
 
     return together
 
