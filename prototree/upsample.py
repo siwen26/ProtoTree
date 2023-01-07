@@ -43,16 +43,21 @@ def upsample(tree: ProtoTree, project_info: dict, project_loader: DataLoader, fo
                 str_token_labels = list(map(str, token_labels))
 
                 attentions_array = attn_maps[j] 
-                fname=os.path.join(dir, '%s_bert_embedding_attention_image.png'%str(decision_node_idx))
+                
+                # print(attentions_array)
+                # print("=="*50)
 
-                fig, ax = plt.subplots()
-                plt.rcParams['figure.figsize'] = (8, 5)
-                im = heatmap(attentions_array, token_labels, ax=ax,
-                   cmap="YlGn", cbarlabel="Attention Weights")
-                fig.tight_layout()
-                plt.savefig(fname)
-                plt.clf()
-                # draw_attention_map(attentions_array, str_token_labels, fname)
+
+                # fname=os.path.join(dir, '%s_bert_embedding_attention_image.png'%str(decision_node_idx))
+
+                # fig, ax = plt.subplots()
+                # plt.rcParams['figure.figsize'] = (8, 5)
+                # im = heatmap(attentions_array, str_token_labels, ax=ax,
+                #    cmap="YlGn", cbarlabel="Attention Weights")
+                # fig.tight_layout()
+                # plt.savefig(fname)
+                # plt.clf()
+                draw_attention_map(attentions_array, str_token_labels, fname)
                 
                 
 #                 x.save(os.path.join(dir,'%s_original_image.png'%str(decision_node_idx)))
@@ -151,6 +156,7 @@ def draw_attention_map(array_attention, token_labels, filename):
 #       texts = annotate_heatmap(im, valfmt="{x:.3f}")
       fig.tight_layout()
       plt.savefig(filename)
+      plt.clf()
       
 
 
@@ -287,7 +293,7 @@ def get_similarity_maps(tree: ProtoTree, project_info: dict):
         with torch.no_grad():
             _, distances_batch, _, attentions = tree.forward_partial(nearest_x, attention_masks=None)
             sim_maps[j] = torch.exp(-distances_batch[0,j,:,:]).cpu().numpy()
-            attn_maps[j] = torch.mean(attentions[-1], dim = 1)[0].cpu().numpy() # extract last attention layer attention weights.
+            attn_maps[j] = torch.mean(attentions[-1], dim = 1)[0].detach().cpu().numpy() # extract last attention layer attention weights.
         del nearest_x
         del project_info[j]['nearest_input']
     return sim_maps, project_info, attn_maps
