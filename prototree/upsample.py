@@ -140,7 +140,7 @@ def draw_attention_map(array_attention, token_labels, filename):
       plt.rcParams['figure.figsize'] = (8, 5)
       im, cbar = heatmap(array_attention, token_labels, ax=ax,
                    cmap="YlGn", cbarlabel="Attention Weights")
-      texts = annotate_heatmap(im, valfmt="{x:.3f}")
+#       texts = annotate_heatmap(im, valfmt="{x:.3f}")
       fig.tight_layout()
       plt.savefig(filename)
       
