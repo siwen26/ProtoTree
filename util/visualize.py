@@ -78,7 +78,7 @@ def _leaf_vis(node: Leaf):
 def _branch_vis(node: Branch, upsample_dir: str):
     branch_id = node.index
     
-    img = Image.open(os.path.join(upsample_dir, '%s_bert_embedding_tsne_image.png'%branch_id))    
+    img = Image.open(os.path.join(upsample_dir, '%s_bert_embedding_attention_image.png'%branch_id))    
     return img
 
 #     img = Image.open(os.path.join(upsample_dir, '%s_nearest_patch_of_image.png'%branch_id))
