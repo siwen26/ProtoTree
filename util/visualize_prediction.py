@@ -19,6 +19,12 @@ from prototree.branch import Branch
 from prototree.leaf import Leaf
 from prototree.node import Node
 
+import matplotlib
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+
 def upsample_local(tree: ProtoTree,
                  sample: torch.Tensor,
                  sample_dir: str,
@@ -123,7 +129,20 @@ def gen_pred_vis(tree: ProtoTree,
     # Save input image
     sample_path = destination_folder + '/node_vis/sample.jpg'
     # save_image(sample, sample_path)
-    Image.open(sample_dir).save(sample_path)
+#     Image.open(sample_dir).save(sample_path)
+
+    # create and save original text inputs with no attention weights. 
+    plt.rcParams['figure.figsize'] = (8,5)
+    fig, ax = plt.subplots()
+    ax = sns.heatmap(np.ones([24,24]),
+                    center=0,
+                    vmin = 0,
+                    vmax = 1,
+                    xticklabels = str_token_labels,
+                    yticklabels = str_token_labels)
+    plt.savefig(sample_path)
+    plt.clf()
+    
 
     # Save an image containing the model output
     output_path = destination_folder + '/node_vis/output.jpg'
