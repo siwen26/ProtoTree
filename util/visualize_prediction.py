@@ -191,7 +191,7 @@ def gen_pred_vis(tree: ProtoTree,
         node_ix = node.index
         prob = probs[node_ix].item()
         
-        s += f'node_{i+1}[image="{upsample_path}/{node_ix}_nearest_patch_of_image.png" group="{"g"+str(i)}"];\n' 
+        s += f'node_{i+1}[image="{upsample_path}/{node_ix}_bert_embedding_attention_image.png" group="{"g"+str(i)}"];\n' 
         if prob > 0.5:
             s += f'node_{i+1}_original[image="{local_upsample_path}/{node_ix}_bounding_box_nearest_patch_of_image.png" imagescale=width group="{"g"+str(i)}"];\n'  
             label = "Present      \nSimilarity %.4f                   "%prob
