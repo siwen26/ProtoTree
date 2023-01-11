@@ -104,6 +104,7 @@ def explain_local(args):
 #     sample = test_transform(Image.open(args.sample_dir)).unsqueeze(0).to(device)
     sample_texts = get_sample_data(args.sample_dir)
     sample_input_ids, sample_attention_masks = tokenization(sample_texts, args.max_length, pretrain_model='bert-base-cased')
+    sample_input_ids, sample_attention_masks = sample_input_ids.to(device), sample_attention_masks.to(device)
 
     gen_pred_vis(tree, sample_input_ids, sample_attention_masks, args.sample_dir, args.results_dir, args, classes)
 
