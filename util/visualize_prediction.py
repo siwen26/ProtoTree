@@ -44,7 +44,8 @@ def upsample_local(tree: ProtoTree,
     for i, node in enumerate(decision_path[:-1]):
         decision_node_idx = node.index
         node_id = tree._out_map[node]
-        img = Image.open(sample_dir)
+#         img = Image.open(sample_dir)
+        
         x_np = np.asarray(img)
         x_np = np.float32(x_np)/ 255
         if x_np.ndim == 2: #convert grayscale to RGB
