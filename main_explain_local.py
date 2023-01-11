@@ -99,18 +99,20 @@ def explain_local(args):
 
 if __name__ == '__main__':
     args = get_local_expl_args()
-    try:
-        Image.open(args.sample_dir)
-        print("Image to explain: ", args.sample_dir)
-        explain_local(args)
-    except: #folder is not image
-        class_name = args.sample_dir.split('/')[-1]
-        if not os.path.exists(os.path.join(os.path.join(args.log_dir, args.results_dir),class_name)):
-            os.makedirs(os.path.join(os.path.join(args.log_dir, args.results_dir),class_name))
-        for filename in os.listdir(args.sample_dir):
-            print(filename)
-            if filename.endswith(".jpg") or filename.endswith(".png"): 
-                args_1 = deepcopy(args)
-                args_1.sample_dir = args.sample_dir+"/"+filename
-                args_1.results_dir = os.path.join(args.results_dir, class_name)
-                explain_local(args_1)
+    print("Texts to explain: ", args.sample_dir)
+    explain_local(args)
+#     try:
+#         Image.open(args.sample_dir)
+#         print("Texts to explain: ", args.sample_dir)
+#         explain_local(args)
+#     except: #folder is not image
+#         class_name = args.sample_dir.split('/')[-1]
+#         if not os.path.exists(os.path.join(os.path.join(args.log_dir, args.results_dir),class_name)):
+#             os.makedirs(os.path.join(os.path.join(args.log_dir, args.results_dir),class_name))
+#         for filename in os.listdir(args.sample_dir):
+#             print(filename)
+#             if filename.endswith(".jpg") or filename.endswith(".png"): 
+#                 args_1 = deepcopy(args)
+#                 args_1.sample_dir = args.sample_dir+"/"+filename
+#                 args_1.results_dir = os.path.join(args.results_dir, class_name)
+#                 explain_local(args_1)
