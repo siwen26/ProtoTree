@@ -39,7 +39,7 @@ def get_args() -> argparse.Namespace:
                         help='Batch size when training the model using minibatch gradient descent')
     parser.add_argument('--max_length',
                         type=int,
-                        default=128,
+                        default=24,
                         help='The maximum length kept for each input texts.')
     parser.add_argument('--text_reshaped_size',
                         type=int,
