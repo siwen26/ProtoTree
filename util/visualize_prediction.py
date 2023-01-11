@@ -27,6 +27,7 @@ import seaborn as sns
 
 def upsample_local(tree: ProtoTree,
                  sample: torch.Tensor,
+                 sample_attention_masks: torch.Tensor, 
                  sample_dir: str,
                  folder_name: str,
                  img_name: str,
@@ -37,8 +38,9 @@ def upsample_local(tree: ProtoTree,
     if not os.path.exists(dir):
         os.makedirs(dir)
     with torch.no_grad():
-        _, distances_batch, _ = tree.forward_partial(sample)
+        _, distances_batch, _, attentions = tree.forward_partial(sample, sample_attention_masks)
         sim_map = torch.exp(-distances_batch[0,:,:,:]).cpu().numpy()
+        attn_maps = torch.mean(attentions[-1], dim = 1)[0].detach().cpu().numpy()
     for i, node in enumerate(decision_path[:-1]):
         decision_node_idx = node.index
         node_id = tree._out_map[node]
@@ -150,7 +152,7 @@ def gen_pred_vis(tree: ProtoTree,
     leaf = tree.nodes_by_index[leaf_ix]
     decision_path = tree.path_to(leaf)
 
-    upsample_local(tree,sample,sample_dir,folder_name,img_name,decision_path,args)
+    upsample_local(tree,sample,sample_attention_masks, sample_dir,folder_name,img_name,decision_path,args)
 
     # Prediction graph is visualized using Graphviz
     # Build dot string
