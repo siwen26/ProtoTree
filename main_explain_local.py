@@ -62,15 +62,15 @@ def explain_local(args):
     # Obtain the dataset and dataloaders
     args.batch_size=64 #placeholder
     args.augment = True #placeholder
-    _, _, _, classes, _ = get_dataloaders(args)
-    mean = (0.485, 0.456, 0.406)
-    std = (0.229, 0.224, 0.225)
-    normalize = transforms.Normalize(mean=mean,std=std)
-    test_transform = transform_no_augment = transforms.Compose([
-                        transforms.Resize(size=(args.image_size, args.image_size)),
-                        transforms.ToTensor(),
-                        normalize
-                    ])
+    _, _, classes = get_dataloaders(args)
+#     mean = (0.485, 0.456, 0.406)
+#     std = (0.229, 0.224, 0.225)
+#     normalize = transforms.Normalize(mean=mean,std=std)
+#     test_transform = transform_no_augment = transforms.Compose([
+#                         transforms.Resize(size=(args.image_size, args.image_size)),
+#                         transforms.ToTensor(),
+#                         normalize
+#                     ])
     
     sample = test_transform(Image.open(args.sample_dir)).unsqueeze(0).to(device)
 
