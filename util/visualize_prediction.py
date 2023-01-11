@@ -23,6 +23,7 @@ import matplotlib
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import seaborn as sns
+from transformers import BertTokenizer
 
 
 def upsample_local(tree: ProtoTree,
