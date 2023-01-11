@@ -28,7 +28,8 @@ def upsample(tree: ProtoTree, project_info: dict, project_loader: DataLoader, fo
     dir = os.path.join(os.path.join(args.log_dir, args.dir_for_saving_images), folder_name)
     if not os.path.exists(dir):
         os.makedirs(dir)
-#     tokenizer = BertTokenizer.from_pretrained('bert-base-cased', do_lower_case=True)
+    
+    tokenizer = BertTokenizer.from_pretrained('bert-base-cased', do_lower_case=True)
 
     with torch.no_grad():
         sim_maps, project_info, attn_maps = get_similarity_maps(tree, project_info)
@@ -40,7 +41,8 @@ def upsample(tree: ProtoTree, project_info: dict, project_loader: DataLoader, fo
                 decision_node_idx = prototype_info['node_ix']
                 x = imgs[prototype_info['input_image_ix']][0]
                 token_labels = x.tolist()
-                str_token_labels = list(map(str, token_labels))
+                # str_token_labels = list(map(str, token_labels))
+                str_token_labels = tokenizer.convert_ids_to_tokens(token_labels)
 
                 attentions_array = attn_maps[j] 
                 fname=os.path.join(dir, '%s_bert_embedding_attention_image.png'%str(decision_node_idx))
