@@ -25,6 +25,18 @@ def get_local_expl_args() -> argparse.Namespace:
                         type=str,
                         default='CUB-200-2011',
                         help='Data set on which the ProtoTree was trained')
+    parser.add_argument('--dataset_pth',
+                        type=str,
+                        default='./data/CUB_200_2011',
+                        help='The directory of CUB image dataset.')
+    parser.add_argument('--text_pth',
+                        type=str,
+                        default='./text',
+                        help='The directory that stores the CUB text files.')
+    parser.add_argument('--pretrain_model',
+                        type=str,
+                        default='bert-base-cased',
+                        help='The pretrained BERT model for tokenization and embedding.')
     parser.add_argument('--max_length',
                         type=int,
                         default=24,
