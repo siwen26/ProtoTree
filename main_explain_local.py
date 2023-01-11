@@ -8,6 +8,8 @@ from PIL import Image
 from shutil import copy
 from copy import deepcopy
 import os
+import unicodedata
+from util.data import tokenization
 
 def get_local_expl_args() -> argparse.Namespace:
 
@@ -23,6 +25,10 @@ def get_local_expl_args() -> argparse.Namespace:
                         type=str,
                         default='CUB-200-2011',
                         help='Data set on which the ProtoTree was trained')
+    parser.add_argument('--max_length',
+                        type=int,
+                        default=24,
+                        help='The maximum length kept for each input texts.')
     parser.add_argument('--sample_dir',
                         type=str,
                         help='Directory to image to be explained, or to a folder containing multiple test images')
@@ -48,6 +54,17 @@ def get_local_expl_args() -> argparse.Namespace:
     args = parser.parse_args()
     return args
 
+
+def get_sample_data(sample_dir):
+    sample_data = []
+    text = open(sample_dir, 'r').read()
+    content = max(text.split('\n'), key=len)
+    decode_content = unicodedata.normalize('NFKD', content).encode('ascii', 'replace').decode('utf-8')
+    new_content = ' '.join(decode_content.split('??'))
+    sample_data.append(new_content)
+    return sample_data 
+
+
 def explain_local(args):
     if not args.disable_cuda and torch.cuda.is_available():
         device = torch.device('cuda:{}'.format(torch.cuda.current_device()))
@@ -72,9 +89,11 @@ def explain_local(args):
 #                         normalize
 #                     ])
     
-    sample = test_transform(Image.open(args.sample_dir)).unsqueeze(0).to(device)
+#     sample = test_transform(Image.open(args.sample_dir)).unsqueeze(0).to(device)
+    sample_texts = get_sample_data(args.sample_dir)
+    sample_input_ids, sample_attention_masks = tokenization(sample_texts, args.max_length, pretrain_model='bert-base-cased')
 
-    gen_pred_vis(tree, sample, args.sample_dir, args.results_dir, args, classes)
+    gen_pred_vis(tree, sample_input_ids, sample_attention_masks, args.sample_dir, args.results_dir, args, classes)
 
 
 
