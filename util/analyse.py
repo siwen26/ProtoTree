@@ -62,9 +62,9 @@ def analyse_output_shape(tree: ProtoTree, trainloader: DataLoader, log: Log, dev
     with torch.no_grad():
         # Get a batch of training data
         xs, ams, ys = next(iter(trainloader))
-        xs, ys = xs.to(device), ys.to(device)
+        xs, ams, ys = xs.to(device), ams.to(device), ys.to(device)
         log.log_message("Image input shape: "+str(xs[0,:].shape)) # shape of text tokenized id.
-        features, _ = tree._net(xs,ams)
+        features, _, attentions = tree._net(xs,ams)
         
         log.log_message("Features output shape (without 1x1 conv layer): "+str(features.shape))
         features = tree._project_layer(features)
