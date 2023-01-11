@@ -205,7 +205,8 @@ def get_text_data(filename_list, prefix_dir):
     for f in filename_list:
         file_pth = prefix_dir + '/' + f + '.txt'
         text = open(file_pth, "r").read()
-        content = ' '.join(text.split('\n')[:-1])
+        # content = ' '.join(text.split('\n')[:-1])
+        content = max(text.split('\n'), key=len) #choose the longest sentence as the text description of image.
         # decode and encode unrecognized character: ascii to utf-8
         decode_content = unicodedata.normalize('NFKD', content).encode('ascii', 'replace').decode('utf-8')
         new_content = ' '.join(decode_content.split('??'))
