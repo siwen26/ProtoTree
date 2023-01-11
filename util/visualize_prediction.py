@@ -142,6 +142,7 @@ def gen_pred_vis(tree: ProtoTree,
     upsample_path = os.path.join(os.path.join(args.log_dir,args.dir_for_saving_images),'pruned_and_projected')
     nodevis_path = os.path.join(args.log_dir,'pruned_and_projected/node_vis')
     local_upsample_path = os.path.join(destination_folder, args.dir_for_saving_images)
+    tokenizer = BertTokenizer.from_pretrained('bert-base-cased', do_lower_case=True)
 
     # Get the model prediction
     with torch.no_grad():
@@ -156,6 +157,8 @@ def gen_pred_vis(tree: ProtoTree,
 #     Image.open(sample_dir).save(sample_path)
 
     # create and save original text inputs with no attention weights. 
+    token_labels = sample.tolist()[0]
+    str_token_labels = tokenizer.convert_ids_to_tokens(token_labels)
     plt.rcParams['figure.figsize'] = (8,5)
     fig, ax = plt.subplots()
     ax = sns.heatmap(np.ones([24,24]),
