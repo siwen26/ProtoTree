@@ -44,21 +44,18 @@ def upsample(tree: ProtoTree, project_info: dict, project_loader: DataLoader, fo
                 # str_token_labels = list(map(str, token_labels))
                 str_token_labels = tokenizer.convert_ids_to_tokens(token_labels)
 
-                attentions_array = attn_maps[j] 
-                fname=os.path.join(dir, '%s_bert_embedding_attention_image.png'%str(decision_node_idx))
-                # fig, ax = plt.subplots()
-                # plt.rcParams['figure.figsize'] = (8, 5)
-                # im = heatmap(np.random.rand(128,128), str_token_labels, ax=ax, cbarlabel="Attention Weights")
-                # fig.tight_layout()
-                # plt.savefig('/content/testing_fig.png')    
+                attentions_array = attn_maps[j]        
+                output_arr, xtick_tokenlabel = set_attention_threshold(attentions_array, str_token_labels, 0.5)
 
-                plt.rcParams['figure.figsize'] = (8,5)
+                fname=os.path.join(dir, '%s_bert_embedding_attention_image.png'%str(decision_node_idx))
+
+                plt.rcParams['figure.figsize'] = (1,5)
                 fig, ax = plt.subplots()
-                ax = sns.heatmap(attentions_array,
+                ax = sns.heatmap(output_arr,
                     center=0,
-                    vmin=-0.005,
-                    vmax=0.01,
-                    xticklabels = str_token_labels,
+                    vmin=0,
+                    vmax=1,
+                    xticklabels = xtick_tokenlabel,
                     yticklabels = str_token_labels)
                 plt.savefig(fname)
                 plt.clf()
@@ -122,6 +119,29 @@ def upsample(tree: ProtoTree, project_info: dict, project_loader: DataLoader, fo
 #                   draw_word_embedding_fugure(x, decision_node_idx)
     
     return project_info
+
+
+def set_attention_threshold(attention_array, labels, threshold):
+    arr_list = []
+    idx_list = []
+    for i in range(attention_array.shape[1]):
+        arr = attention_array[:, i]
+        for j in arr:
+            if j>threshold:
+                arr_list.append(np.expand_dims(arr, axis = 1))
+                idx_list.append(labels[i])
+                break
+    if len(arr_list) > 1:
+        output_arr = np.hstack(tuple(arr_list))
+        xticklabel = idx_list
+    elif len(arr_list) == 1:
+        output_arr = arr_list[0]
+        xticklabel = idx_list
+    else:
+        output_arr = attention_array 
+        xticklabel = labels
+    return output_arr, xticklabel
+
 
 
 def draw_word_embedding_figure(word_input_ids, decision_node_idx):
