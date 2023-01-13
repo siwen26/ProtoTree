@@ -24,6 +24,7 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import seaborn as sns
 from transformers import BertTokenizer
+from prototree.upsample import set_attention_threshold
 
 
 def upsample_local(tree: ProtoTree,
@@ -51,15 +52,16 @@ def upsample_local(tree: ProtoTree,
         token_labels = sample.tolist()[0]
         str_token_labels = tokenizer.convert_ids_to_tokens(token_labels)
         attentions_array = attn_maps
+        output_arr, xtick_tokenlabel = set_attention_threshold(attentions_array, str_token_labels, 0.5)
         fname=os.path.join(dir,'%s_bounding_box_nearest_patch_of_image.png'%str(decision_node_idx))
         
-        plt.rcParams['figure.figsize'] = (8,5)
+        plt.rcParams['figure.figsize'] = (1,5)
         fig, ax = plt.subplots()
-        ax = sns.heatmap(attentions_array,
+        ax = sns.heatmap(output_arr,
                     center=0,
-                    vmin=np.min(attentions_array),
-                    vmax=np.max(attentions_array),
-                    xticklabels = str_token_labels,
+                    vmin=0,
+                    vmax=1,
+                    xticklabels = xtick_tokenlabel,
                     yticklabels = str_token_labels)
         plt.savefig(fname)
         plt.clf()
