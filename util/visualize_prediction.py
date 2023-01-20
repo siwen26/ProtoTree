@@ -1,4 +1,3 @@
-
 import os
 import cv2
 import matplotlib.pyplot as plt
@@ -54,15 +53,27 @@ def upsample_local(tree: ProtoTree,
         attentions_array = attn_maps
         output_arr, xtick_tokenlabel = set_attention_threshold(attentions_array, str_token_labels, 0.5)
         fname=os.path.join(dir,'%s_bounding_box_nearest_patch_of_image.png'%str(decision_node_idx))
+
+        # sort out top 5 attention tokens
+      
+        sorted_index = np.argsort(output_arr, axis=0)[-5:, :]
+        sorted_index = sorted_index.flatten().tolist()
+        sorted_index.sort()
+        filtered_arr_list = []
+        ytick_tokenlabel = []
+        for i in sorted_index:
+          filtered_arr_list.append(output_arr[i])
+          ytick_tokenlabel.append(str_token_labels[i])
+        filtered_arr = np.array(filtered_arr_list)
         
         plt.rcParams['figure.figsize'] = (1,5)
         fig, ax = plt.subplots()
-        ax = sns.heatmap(output_arr,
+        ax = sns.heatmap(filtered_arr,
                     center=0,
                     vmin=0,
                     vmax=1,
                     xticklabels = xtick_tokenlabel,
-                    yticklabels = str_token_labels)
+                    yticklabels = ytick_tokenlabel)
         plt.savefig(fname)
         plt.clf()
         
