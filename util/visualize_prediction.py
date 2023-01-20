@@ -66,7 +66,7 @@ def upsample_local(tree: ProtoTree,
           ytick_tokenlabel.append(str_token_labels[i])
         filtered_arr = np.array(filtered_arr_list)
         
-        plt.rcParams['figure.figsize'] = (1,5)
+        plt.rcParams['figure.figsize'] = (8,5)
         fig, ax = plt.subplots()
         ax = sns.heatmap(filtered_arr,
                     center=0,
